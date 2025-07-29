@@ -81,15 +81,16 @@ jobs:
       - name: Copy backend coverage report
         run: docker cp backend:/app/coverage ./backend-coverage
 
-      - name: Install frontend devDependencies (hotfix for CI)
-        run: docker compose exec frontend npm install
+      - name: Install frontend devDependencies (force dev)
+        run: docker compose exec frontend /bin/sh -c "NODE_ENV=development npm install"
+
 
       - name: Run frontend tests with coverage
         run: docker compose exec frontend npm run test -- --coverage
 
       - name: Copy frontend coverage report
         run: docker cp frontend:/app/coverage ./frontend-coverage
-        
+
       - name: Install Playwright and devDependencies
         run: docker compose exec frontend npm install && npx playwright install
 
