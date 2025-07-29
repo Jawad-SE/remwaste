@@ -13,9 +13,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Show disk usage
+        run: df -h
 
       - name: Remove Docker volumes before build
         run: docker volume prune -f
+
+      - name: Remove Docker system data before build
+        run: docker system prune -af
 
       - name: Create backend/.env from secrets
         run: |
