@@ -9,7 +9,7 @@ jest.mock('@headlessui/react', () => {
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import PatientRow from "../../components/patients/PatientRow";
+import PatientRow from "../components/patients/PatientRow";
 import { useRole } from "@/hooks/useRole";
 
 const push = jest.fn();

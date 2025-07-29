@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import PatientModal from "../../components/PatientModal";
+import PatientModal from "../components/PatientModal";
 
 describe("PatientModal", () => {
   const patient = {

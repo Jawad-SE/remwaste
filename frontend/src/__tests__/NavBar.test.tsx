@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Navbar from '../../components/NavBar'; // Use correct casing!
+import Navbar from '../components/NavBar'; // Use correct casing!
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock next/navigation for router usage in UserMenu if needed

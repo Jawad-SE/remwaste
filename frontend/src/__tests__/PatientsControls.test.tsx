@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import PatientsControls from '../../components/patients/PatientsControls';
+import PatientsControls from '../components/patients/PatientsControls';
 
 jest.mock('@/hooks/useRole', () => ({
   useRole: jest.fn(),
