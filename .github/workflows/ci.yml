@@ -1,0 +1,135 @@
+name: CI - Docker Compose Test & Coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Show disk usage
+        run: df -h
+
+      - name: Remove Docker volumes before build
+        run: docker volume prune -f
+
+      - name: Remove Docker system data before build
+        run: docker system prune -af
+
+      - name: Create backend/.env from secrets
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> backend/.env
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up Docker Compose
+        run: docker compose version
+
+      - name: Build containers
+        run: docker compose build --no-cache
+
+      - name: Start containers in background
+        run: docker compose up -d
+
+      - name: Show migrate logs
+        run: docker compose logs migrate
+
+      - name: Show backend logs
+        run: docker compose logs backend
+      
+      - name: Show db logs
+        run: docker compose logs db
+
+      - name: Wait for backend to be healthy
+        run: |
+          for i in {1..30}; do
+            if docker compose exec backend curl -s http://localhost:3001/api/health; then
+              echo "Backend is healthy."
+              break
+            else
+              echo "Waiting for backend to be healthy..."
+              sleep 5
+            fi
+            if [ $i -eq 30 ]; then
+              echo "Backend failed to become healthy."
+              exit 1
+            fi
+          done
+
+      # --- ADD THESE STEPS NEXT ---
+      - name: Show migrate logs
+        run: docker compose logs migrate
+
+      - name: Show backend logs
+        run: docker compose logs backend
+      
+      - name: Show db logs
+        run: docker compose logs db
+
+      # Run backend tests inside container
+      - name: Run backend tests with coverage
+        run: docker compose exec backend npm run test:coverage
+
+
+      # Run backend tests inside container
+      - name: Run backend tests with coverage
+        run: docker compose exec backend npm run test:coverage
+
+      # Copy backend coverage out
+      - name: Copy backend coverage report
+        run: docker cp backend:/app/coverage ./backend-coverage
+
+      # Run frontend tests inside container
+      - name: Run frontend tests with coverage
+        run: docker compose exec frontend npm run test -- --coverage
+
+      # Copy frontend coverage out
+      - name: Copy frontend coverage report
+        run: docker cp frontend:/app/coverage ./frontend-coverage
+
+      # Run Playwright E2E tests
+      - name: Run Playwright tests
+        run: docker compose exec frontend npx playwright test
+
+      # Upload artifacts
+      - name: Upload backend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: ./backend-coverage
+
+      - name: Upload frontend coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-coverage
+          path: ./frontend-coverage
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: frontend/playwright-report
+
+      - name: Remove backend coverage after upload
+        run: rm -rf ./backend-coverage
+
+      - name: Remove frontend coverage after upload
+        run: rm -rf ./frontend-coverage
+
+      - name: Remove Docker images after job
+        if: always()
+        run: docker rmi $(docker images -q) || true
+
+      - name: Tear down containers
+        if: always()
+        run: docker compose down -v

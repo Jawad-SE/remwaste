@@ -1,0 +1,72 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  migrate:
+    build:
+      context: ./backend
+    entrypoint: [ "npx", "prisma", "migrate", "deploy" ]
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
+    depends_on:
+      - db
+    networks:
+      - my-network
+  seed:
+    build:
+      context: ./backend
+    entrypoint: [ "npx", "prisma", "db", "seed" ]
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
+    depends_on:
+      - migrate
+    networks:
+      - my-network
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    environment:
+      DATABASE_URL: "postgresql://myuser:mypassword@db:5432/mydb"
+      JWT_SECRET: "supersecretkey"
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+      - migrate
+      - seed     # wait for migrations before starting
+    networks:
+      - my-network
+
+  frontend:
+    build:
+      context: ./frontend
+      args: 
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:3001
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - my-network
+
+volumes:
+  pgdata:
+
+networks:
+  my-network:
+    driver: bridge

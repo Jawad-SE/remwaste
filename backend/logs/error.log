@@ -1,0 +1,62 @@
+2025-07-27T15:53:21.470Z [[31merror[39m]: Error in GET /api/patients/undefined: PrismaClientValidationError: 
+Invalid `prisma.patient.findUnique()` invocation in
+/Users/apple/remwaste/backend/src/services/patients.service.ts:15:18
+
+  12 };
+  13 
+  14 export const getPatientByIdService = async (id: number) =>
+→ 15   prisma.patient.findUnique({
+         where: {
+       +   id: Int
+         }
+       })
+
+Argument `id` is missing.
+    at Dn (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/core/errorRendering/throwValidationException.ts:45:9)
+    at ri.throwValidationException [as handleRequestError] (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:202:7)
+    at ri.handleAndLogRequestError (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:174:12)
+    at ri.request (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:143:12)
+    at l (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:862:24)
+    at getPatientById (/Users/apple/remwaste/backend/src/controllers/patients.controller.ts:27:19)
+2025-07-27T15:56:50.911Z [[31merror[39m]: Error in POST /api/auth/register: SyntaxError: Expected ',' or '}' after property value in JSON at position 58 (line 4 column 3)
+    at JSON.parse (<anonymous>)
+    at parse (/Users/apple/remwaste/backend/node_modules/body-parser/lib/types/json.js:77:19)
+    at /Users/apple/remwaste/backend/node_modules/body-parser/lib/read.js:123:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:211:14)
+    at invokeCallback (/Users/apple/remwaste/backend/node_modules/raw-body/index.js:238:16)
+    at done (/Users/apple/remwaste/backend/node_modules/raw-body/index.js:227:7)
+    at IncomingMessage.onEnd (/Users/apple/remwaste/backend/node_modules/raw-body/index.js:287:7)
+    at IncomingMessage.emit (node:events:518:28)
+    at endReadableNT (node:internal/streams/readable:1698:12)
+    at processTicksAndRejections (node:internal/process/task_queues:90:21)
+2025-07-28T07:21:04.682Z [[31merror[39m]: Error in GET /api/patients: PrismaClientKnownRequestError: 
+Invalid `prisma.patient.findMany()` invocation in
+/Users/apple/remwaste/backend/src/services/patients.service.ts:3:65
+
+  1 import { prisma } from "../prisma/client";
+  2 
+→ 3 export const getAllPatientsService = async () => prisma.patient.findMany(
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at ri.handleRequestError (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:228:13)
+    at ri.handleAndLogRequestError (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:174:12)
+    at ri.request (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:143:12)
+    at l (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:862:24)
+    at getAllPatients (/Users/apple/remwaste/backend/src/controllers/patients.controller.ts:13:20)
+2025-07-28T07:21:04.683Z [[31merror[39m]: Error in GET /api/auth/me: PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/apple/remwaste/backend/src/services/auth.service.ts:22:22
+
+  19 };
+  20 
+  21 export const getUserProfile = async (userId: string) => {
+→ 22   return prisma.user.findUnique(
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at ri.handleRequestError (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:228:13)
+    at ri.handleAndLogRequestError (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:174:12)
+    at ri.request (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/RequestHandler.ts:143:12)
+    at l (/Users/apple/remwaste/backend/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:862:24)
+    at me (/Users/apple/remwaste/backend/src/controllers/auth.controller.ts:27:16)
