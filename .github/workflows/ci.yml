@@ -72,6 +72,9 @@ jobs:
       - name: Show db logs
         run: docker compose logs db
 
+      - name: Install backend dev dependencies for testing
+        run: docker compose exec backend npm install
+
       - name: Run backend tests with coverage
         run: docker compose exec backend npm run test:coverage
 
