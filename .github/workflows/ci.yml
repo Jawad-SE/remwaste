@@ -81,6 +81,9 @@ jobs:
       - name: Copy backend coverage report
         run: docker cp backend:/app/coverage ./backend-coverage
 
+      - name: Install frontend devDependencies (hotfix for CI)
+        run: docker compose exec frontend npm install
+
       - name: Run frontend tests with coverage
         run: docker compose exec frontend npm run test -- --coverage
 
