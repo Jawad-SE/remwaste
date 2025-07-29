@@ -3,8 +3,8 @@ import { test, expect } from "@playwright/test";
 test.describe("Patient permissions for non-admin user", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/login");
-    await page.fill('input[name="email"]', "jane@doe.com");
-    await page.fill('input[name="password"]', "Rating123@");
+    await page.fill('input[name="email"]', "testuser@example.com");
+    await page.fill('input[name="password"]', "testpass123");
     await page.click('button[type="submit"]');
     await page.waitForURL("/patients");
   });
