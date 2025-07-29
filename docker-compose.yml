@@ -29,8 +29,9 @@ services:
     build:
       context: ./backend
     container_name: backend
-    env_file:
-      - ./backend/.env
+    environment:
+      DATABASE_URL: "postgresql://myuser:mypassword@db:5432/mydb"
+      JWT_SECRET: "supersecretkey"
     ports:
       - "3001:3001"
     depends_on:
