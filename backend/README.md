@@ -52,7 +52,7 @@ A modern Node.js + Express backend using PostgreSQL (via Prisma ORM) for Patient
     ```
     DATABASE_URL=postgresql://<user>:<password>@localhost:5432/<db>
     JWT_SECRET=your_jwt_secret
-    PORT=8000
+    PORT=3001
     ```
 
 4. **Run database migrations**
@@ -64,14 +64,14 @@ A modern Node.js + Express backend using PostgreSQL (via Prisma ORM) for Patient
     ```bash
     npm run dev
     ```
-    The API will run at [http://localhost:8000](http://localhost:8000)
+    The API will run at [http://localhost:3001](http://localhost:3001)
 
 ---
 
 ## 📚 API Documentation
 
 Interactive Swagger docs are available at:  
-[http://localhost:8000/api-docs](http://localhost:8000/api-docs)
+[http://localhost:3001/api-docs](http://localhost:3001/api-docs)
 
 ---
 

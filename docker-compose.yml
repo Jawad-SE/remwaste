@@ -1,46 +1,60 @@
-version: "3.9"
+version: "3.8"
 
 services:
-  postgres:
-    image: postgres:16-alpine
+  db:
+    image: postgres:15-alpine
     container_name: postgres
     restart: always
     environment:
-      POSTGRES_DB: patientdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
     volumes:
-      - db_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  migrate:
+    build:
+      context: ./backend
+    entrypoint: [ "npx", "prisma", "migrate", "deploy" ]
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
+    depends_on:
+      - db
+    networks:
+      - my-network
 
   backend:
     build:
       context: ./backend
     container_name: backend
-    environment:
-      NODE_ENV: production
-      DATABASE_URL: postgres://postgres:password@postgres:5432/patientdb
-      JWT_SECRET: supersecret
-      PORT: 3001
-    depends_on:
-      - postgres
+    env_file:
+      - ./backend/.env
     ports:
       - "3001:3001"
-    command: sh -c "npx prisma migrate deploy && node dist/server.js"
+    depends_on:
+      - db
+      - migrate     # wait for migrations before starting
+    networks:
+      - my-network
 
   frontend:
     build:
       context: ./frontend
-      args:
-        NEXT_PUBLIC_API_BASE_URL: http://backend:3001
+      args: 
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:3001
     container_name: frontend
     ports:
       - "3000:3000"
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: http://backend:3001
     depends_on:
       - backend
+    networks:
+      - my-network
 
 volumes:
-  db_data:
+  pgdata:
+
+networks:
+  my-network:
+    driver: bridge

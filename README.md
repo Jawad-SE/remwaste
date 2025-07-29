@@ -57,7 +57,7 @@ npm install
 npx prisma migrate dev
 npm run dev
 ```
-Runs at [http://localhost:8000](http://localhost:8000)
+Runs at [http://localhost:3001](http://localhost:3001)
 
 ---
 

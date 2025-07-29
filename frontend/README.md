@@ -35,8 +35,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ```bash
 npm run dev
-# or
-# yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -44,7 +42,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Run the container
 
 ```bash
-docker run -p 3000:3000 --env NEXT_PUBLIC_API_URL=http://backend:3001 patient-frontend
+docker compose up --build
 ```
 
 ## Available Scripts

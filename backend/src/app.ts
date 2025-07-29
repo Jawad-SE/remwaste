@@ -19,7 +19,11 @@ dotenv.config();
 
 const app = express();
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "http://frontend:3000"],
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(requestLogger);
@@ -72,7 +76,7 @@ const swaggerOptions = {
     security: [{ bearerAuth: [] }],
   },
 
-  apis: ["./src/routes/*.ts"],
+  apis: ["./dist/routes/*.js", "./src/routes/*.ts"],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
