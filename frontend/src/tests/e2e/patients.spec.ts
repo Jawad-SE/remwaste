@@ -67,8 +67,8 @@ async function createPatient(page: Page) {
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/login");
-  await page.fill('input[name="email"]', "john@doe.com");
-  await page.fill('input[name="password"]', "Rating123@");
+  await page.fill('input[name="email"]', "admin@example.com");
+  await page.fill('input[name="password"]', "adminpass");
   await page.click('button[type="submit"]');
   await page.waitForURL("/patients");
 });

@@ -26,8 +26,8 @@ test("Register a new user", async ({ page }) => {
 test("Login and logout flow", async ({ page }) => {
 
   await page.goto("/login");
-  await page.fill('input[name="email"]', "john@doe.com");
-  await page.fill('input[name="password"]', "Rating123@");
+  await page.fill('input[name="email"]', "admin@example.com");
+  await page.fill('input[name="password"]', "adminpass");
   await page.click('button[type="submit"]');
   await expect(page).toHaveURL("/patients");
 
