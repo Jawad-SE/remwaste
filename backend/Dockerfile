@@ -10,6 +10,9 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
+# ADD THIS LINE to install curl for health checks
+RUN apk add --no-cache curl
+
 ENV NODE_ENV=production
 
 COPY --from=builder /app/package*.json ./
