@@ -17,10 +17,10 @@ jobs:
       - name: Show disk usage
         run: df -h
 
-      - name: Remove Docker volumes before build
+      - name: Prune Docker volumes before build
         run: docker volume prune -f
 
-      - name: Remove Docker system data before build
+      - name: Prune Docker system before build
         run: docker system prune -af
 
       - name: Create backend/.env from secrets
@@ -42,7 +42,6 @@ jobs:
       - name: Start containers in background
         run: docker compose up -d
 
-      # Wait for DB to be healthy
       - name: Wait for Postgres to be healthy
         run: |
           for i in {1..30}; do
@@ -61,11 +60,11 @@ jobs:
             fi
           done
 
-      # Run your seed/migrate logic after DB is ready (handled by Compose dependencies)
-
-      # Show logs (for debugging if needed)
       - name: Show migrate logs
         run: docker compose logs migrate
+
+      - name: Show seed logs
+        run: docker compose logs seed
 
       - name: Show backend logs
         run: docker compose logs backend
@@ -73,27 +72,21 @@ jobs:
       - name: Show db logs
         run: docker compose logs db
 
-      # Run backend tests inside container
       - name: Run backend tests with coverage
         run: docker compose exec backend npm run test:coverage
 
-      # Copy backend coverage out
       - name: Copy backend coverage report
         run: docker cp backend:/app/coverage ./backend-coverage
 
-      # Run frontend tests inside container
       - name: Run frontend tests with coverage
         run: docker compose exec frontend npm run test -- --coverage
 
-      # Copy frontend coverage out
       - name: Copy frontend coverage report
         run: docker cp frontend:/app/coverage ./frontend-coverage
 
-      # Run Playwright E2E tests
       - name: Run Playwright tests
         run: docker compose exec frontend npx playwright test
 
-      # Upload artifacts
       - name: Upload backend coverage
         uses: actions/upload-artifact@v4
         with:

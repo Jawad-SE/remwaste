@@ -26,9 +26,11 @@ services:
     environment:
       DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - my-network
+
   seed:
     build:
       context: ./backend
@@ -36,7 +38,8 @@ services:
     environment:
       DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
     depends_on:
-      - migrate
+      migrate:
+        condition: service_started
     networks:
       - my-network
 
@@ -50,9 +53,12 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - db
-      - migrate
-      - seed     # wait for migrations before starting
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_started
+      seed:
+        condition: service_started
     networks:
       - my-network
 
@@ -65,7 +71,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - backend
+      backend:
+        condition: service_started
     networks:
       - my-network
 
