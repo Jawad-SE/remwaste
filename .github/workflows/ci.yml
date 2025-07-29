@@ -13,6 +13,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
       - name: Show disk usage
         run: df -h
 
@@ -41,45 +42,36 @@ jobs:
       - name: Start containers in background
         run: docker compose up -d
 
-      - name: Show migrate logs
-        run: docker compose logs migrate
-
-      - name: Show backend logs
-        run: docker compose logs backend
-      
-      - name: Show db logs
-        run: docker compose logs db
-
-      - name: Wait for backend to be healthy
+      # Wait for DB to be healthy
+      - name: Wait for Postgres to be healthy
         run: |
           for i in {1..30}; do
-            if docker compose exec backend curl -s http://localhost:3001/api/health; then
-              echo "Backend is healthy."
+            STATUS=$(docker inspect --format='{{json .State.Health.Status}}' postgres | tr -d '"')
+            if [ "$STATUS" == "healthy" ]; then
+              echo "Postgres is healthy."
               break
             else
-              echo "Waiting for backend to be healthy..."
+              echo "Waiting for Postgres to be healthy... ($STATUS)"
               sleep 5
             fi
             if [ $i -eq 30 ]; then
-              echo "Backend failed to become healthy."
+              echo "Postgres failed to become healthy."
+              docker compose logs db
               exit 1
             fi
           done
 
-      # --- ADD THESE STEPS NEXT ---
+      # Run your seed/migrate logic after DB is ready (handled by Compose dependencies)
+
+      # Show logs (for debugging if needed)
       - name: Show migrate logs
         run: docker compose logs migrate
 
       - name: Show backend logs
         run: docker compose logs backend
-      
+
       - name: Show db logs
         run: docker compose logs db
-
-      # Run backend tests inside container
-      - name: Run backend tests with coverage
-        run: docker compose exec backend npm run test:coverage
-
 
       # Run backend tests inside container
       - name: Run backend tests with coverage
