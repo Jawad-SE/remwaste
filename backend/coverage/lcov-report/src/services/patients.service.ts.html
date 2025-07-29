@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/25</span>
+                <span class='fraction'>28/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/12</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/18</span>
+                <span class='fraction'>21/21</span>
             </div>
         
             
@@ -98,39 +98,47 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { prisma } from "../prisma/client";
@@ -139,8 +147,8 @@ export const getAllPatientsService = async () =&gt; prisma.patient.findMany();
 &nbsp;
 export const createPatientService = async (data: any) =&gt; {
   const { firstName, lastName, email, phoneNumber, dob } = data;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!firstName || !lastName || !email || !phoneNumber || !dob)
-<span class="cstat-no" title="statement not covered" >    throw new Error("All fields required");</span>
+  if (!firstName || !lastName || !email || !phoneNumber || !dob)
+    throw new Error("All fields required");
   return prisma.patient.create({
     data: { firstName, lastName, email, phoneNumber, dob: new Date(dob) },
   });
@@ -151,12 +159,16 @@ export const getPatientByIdService = async (id: number) =&gt;
 &nbsp;
 export const updatePatientService = async (id: number, data: any) =&gt; {
   const { id: _id, ...updateData } = data;
+&nbsp;
+  if (updateData.dob) {
+    updateData.dob = new Date(updateData.dob);
+  } else {
+    delete updateData.dob;
+  }
+&nbsp;
   return prisma.patient.update({
     where: { id },
-    data: {
-      ...updateData,
-      dob: new Date(updateData.dob),
-    },
+    data: updateData,
   });
 };
 &nbsp;
@@ -164,8 +176,8 @@ export const deletePatientService = async (id: number) =&gt;
   prisma.patient.delete({ where: { id } });
 &nbsp;
 export const bulkCreatePatientsService = async (patients: any[]) =&gt; {
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!patients || !Array.isArray(patients) || patients.length === 0)
-<span class="cstat-no" title="statement not covered" >    throw new Error("Invalid patients array");</span>
+  if (!patients || !Array.isArray(patients) || patients.length === 0)
+    throw new Error("Invalid patients array");
   return prisma.patient.createMany({ data: patients });
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -175,7 +187,7 @@ export const bulkCreatePatientsService = async (patients: any[]) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-27T16:27:53.276Z
+                at 2025-07-29T08:40:02.011Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
