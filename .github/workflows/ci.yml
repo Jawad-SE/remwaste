@@ -49,6 +49,18 @@ jobs:
             fi
           done
 
+      # --- ADD THESE STEPS NEXT ---
+      - name: Show migrate logs
+        run: docker compose logs migrate
+
+      - name: Show backend logs
+        run: docker compose logs backend
+
+      # Run backend tests inside container
+      - name: Run backend tests with coverage
+        run: docker compose exec backend npm run test:coverage
+
+
       # Run backend tests inside container
       - name: Run backend tests with coverage
         run: docker compose exec backend npm run test:coverage
@@ -87,6 +99,16 @@ jobs:
         with:
           name: playwright-report
           path: frontend/playwright-report
+
+      - name: Remove backend coverage after upload
+        run: rm -rf ./backend-coverage
+
+      - name: Remove frontend coverage after upload
+        run: rm -rf ./frontend-coverage
+
+      - name: Remove Docker images after job
+        if: always()
+        run: docker rmi $(docker images -q) || true
 
       - name: Tear down containers
         if: always()

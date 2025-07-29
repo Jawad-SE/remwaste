@@ -24,6 +24,16 @@ services:
       - db
     networks:
       - my-network
+  seed:
+    build:
+      context: ./backend
+    entrypoint: [ "npx", "prisma", "db", "seed" ]
+    environment:
+      DATABASE_URL: postgres://myuser:mypassword@db:5432/mydb
+    depends_on:
+      - migrate
+    networks:
+      - my-network
 
   backend:
     build:
@@ -36,7 +46,8 @@ services:
       - "3001:3001"
     depends_on:
       - db
-      - migrate     # wait for migrations before starting
+      - migrate
+      - seed     # wait for migrations before starting
     networks:
       - my-network
 

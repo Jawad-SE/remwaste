@@ -9,6 +9,9 @@
     "start": "node dist/server.js",
     "test:coverage": "jest --coverage"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
