@@ -9,23 +9,22 @@ describe("Auth API", () => {
     lastName: "User",
     role: "user",
   };
-  const admin = {
-    email: "admin@example.com",
-    password: "adminpass",
-    firstName: "Admin",
-    lastName: "User",
-    role: "admin",
-  };
 
+  // No need to register the seeded user
+  // Optionally, you can check login works beforeAll (optional)
   beforeAll(async () => {
-    await request(app).post("/api/auth/register").send(user);
-    await request(app).post("/api/auth/register").send(admin);
+    // Try logging in to ensure user exists
+    const res = await request(app)
+      .post("/api/auth/login")
+      .send({ email: user.email, password: user.password });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.token).toBeDefined();
   });
 
   it("should register a new user", async () => {
     const res = await request(app)
       .post("/api/auth/register")
-      .send({ ...user, email: "newuser@example.com" });
+      .send({ ...user, email: "newuser@example.com" }); // unique email for this test
     expect([201, 400]).toContain(res.statusCode);
   });
 
@@ -57,7 +56,7 @@ describe("Auth API", () => {
       .send({ email: "nouser@example.com", password: "nope" });
     expect(res.statusCode).toBe(401);
   });
-  
+
   it("should not get profile with invalid token", async () => {
     const res = await request(app)
       .get("/api/auth/me")
@@ -70,6 +69,7 @@ describe("Auth API", () => {
       .post("/api/auth/login")
       .send({ email: user.email, password: user.password });
     const token = loginRes.body.token;
+    expect(token).toBeDefined();
     const res = await request(app)
       .get("/api/auth/me")
       .set("Authorization", `Bearer ${token}`);
