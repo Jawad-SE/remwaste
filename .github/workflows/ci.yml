@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Remove Docker volumes before build
+        run: docker volume prune -f
+
       - name: Create backend/.env from secrets
         run: |
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > backend/.env
